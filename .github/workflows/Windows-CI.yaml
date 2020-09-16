@@ -22,7 +22,7 @@ jobs:
       matrix:
         platform: [windows-latest]
         python-version: [3.6.8]
-        compiler-version: [15, 16]
+        compiler-version: [16]
         build_type: [Release, Debug]
 
     env:
@@ -66,11 +66,21 @@ jobs:
       - name: Setup Visual Studio
         uses: microsoft/setup-msbuild@v1.0.1
         with:
-          vs-version: '[${{ matrix.compiler-version }}]'
+          vs-version: ${{ matrix.compiler-version }}
       # Setup Conan
       - name: Setup Conan Directory
         run: conan user
         shell: cmd
+      # Get Tag Name
+      - name: Get Tag
+        uses: olegtarasov/get-tag@v2
+      # Set Conan Version
+      - name: Set Conan Version
+        run: |
+          set XMS_VERSION=%GIT_TAG_NAME%
+          set CONAN_UPLOAD=%AQUAVEO_CONAN
+          set RELEASE_PYTON='True'
+        if: startsWith(github.ref, 'refs/tags/')
       # Build the Conan Package
       - name: Build the Conan Packages
         run: python build.py
