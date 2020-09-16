@@ -1,0 +1,68 @@
+name: Windows-CI
+
+on: [push, pull_request]
+
+jobs:
+
+  test:
+    name: Windows VisualStudio-${{ matrix.compiler-version }} (${{ matrix.build_type }})
+    runs-on: ${{ matrix.platform }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [windows-latest]
+        python-version: [3.6.8]
+        compiler-version: [12, 14, 16]
+        build_type: [Release, Debug]
+
+    env:
+      # Library Variables
+      LIBRARY_NAME: xmscore
+      XMS_VERSION: 99.99.99
+      # Conan Variables
+      CONAN_REFERENCE: $LIBRARY_NAME/$XMS_VERSION
+      CONAN_ARCHS: x86_64
+      CONAN_USERNAME: aquaveo
+      CONAN_CHANNEL: testing
+      CONAN_LOGIN_USERNAME: ${{ secrets.CONAN_USER_SECRET }}
+      CONAN_PASSWORD: ${{ secrets.CONAN_PASSWORD_SECRET }}
+      CONAN_REMOTES: https://conan.aquaveo.com
+      CONAN_BUILD_TYPES: ${{ matrix.build_type }}
+      CONAN_VISUAL_VERSIONS: ${{ matrix.compiler-version }}
+      CONAN_STABLE_BRANCH_PATTERN: ^([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$
+      CONAN_UPLOAD_ONLY_WHEN_STABLE: 1
+      # Aquapi Variables
+      AQUAPI_USERNAME: ${{ secrets.AQUAPI_USERNAME_SECRET }}
+      AQUAPI_PASSWORD: ${{ secrets.AQUAPI_PASSWORD_SECRET }}
+      AQUAPI_URL: ${{ secrets.AQUAPI_URL_SECRET }}
+      # Python Variables
+      PYTHON_TARGET_VERSION: ${{ python-version }}
+      RELEASE_PYTHON: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      # Checkout Sources
+      - uses: actions/checkout@v2
+      # Setup Python
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      # Install Python Dependencies
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install conan conan_package_tools devpi-client wheel
+      # Setup Visual Studio
+      - name: Setup Visual Studio
+        uses: microsoft/setup-msbuild@v1.0.1
+        with:
+          vs-version: ${{ matrix.compiler-version
+      # Setup Conan
+      - name: Setup Conan Directory
+        run: conan user
+        shell: cmd
+      # Build the Conan Package
+      - name: Build the Conan Packages
+        run: python build.py
+        shell: cmd
