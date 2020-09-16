@@ -21,7 +21,7 @@ jobs:
       LIBRARY_NAME: xmscore
       XMS_VERSION: 99.99.99
       # Conan Variables
-      CONAN_REFERENCE: $LIBRARY_NAME/$XMS_VERSION
+      CONAN_REFERENCE: %LIBRARY_NAME%/%XMS_VERSION%
       CONAN_ARCHS: x86_64
       CONAN_USERNAME: aquaveo
       CONAN_CHANNEL: testing
