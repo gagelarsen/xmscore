@@ -57,7 +57,7 @@ jobs:
       - name: Setup Visual Studio
         uses: microsoft/setup-msbuild@v1.0.1
         with:
-          vs-version: ${{ matrix.compiler-version
+          vs-version: ${{ matrix.compiler-version }}
       # Setup Conan
       - name: Setup Conan Directory
         run: conan user
