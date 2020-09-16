@@ -14,7 +14,7 @@ on:
 jobs:
 
   test:
-    name: Windows VisualStudio-${{ matrix.compiler-version }} (${{ matrix.build_type }})
+    name: Visual Studio ${{ matrix.compiler-version }} (${{ matrix.build_type }}, Windows)
     runs-on: ${{ matrix.platform }}
 
     strategy:
@@ -66,7 +66,7 @@ jobs:
       - name: Setup Visual Studio
         uses: microsoft/setup-msbuild@v1.0.1
         with:
-          vs-version: ${{ matrix.compiler-version }}
+          vs-version: '[${{ matrix.compiler-version }}]'
       # Setup Conan
       - name: Setup Conan Directory
         run: conan user
