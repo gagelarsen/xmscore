@@ -7,7 +7,7 @@ jobs:
 
   # The Build and Test Job
   test:
-    name: Clang-${{ matrix.compiler-version }} (${{ matrix.build_type }}, Macos)
+    name: Clang-11.0 (${{ matrix.build_type }}, Macos)
     runs-on: ${{ matrix.platform }}
 
     strategy:
@@ -15,7 +15,6 @@ jobs:
       matrix:
         platform: [macos-latest]
         python-version: [3.6]
-        compiler-version: [11.0]
         build_type: [Release, Debug]
 
     env:
@@ -31,7 +30,7 @@ jobs:
       CONAN_PASSWORD: ${{ secrets.CONAN_PASSWORD_SECRET }}
       CONAN_REMOTES: https://conan.aquaveo.com
       CONAN_BUILD_TYPES: ${{ matrix.build_type }}
-      CONAN_APPLE_CLANG_VERSIONS: ${{ matrix.compiler-version }}
+      CONAN_APPLE_CLANG_VERSIONS: 11.0
       # Aquapi Variables
       AQUAPI_USERNAME: ${{ secrets.AQUAPI_USERNAME_SECRET }}
       AQUAPI_PASSWORD: ${{ secrets.AQUAPI_PASSWORD_SECRET }}
