@@ -4,10 +4,10 @@ on:
   push:
     tags:
       - '*'
-    branch:
+    branches:
       - '*'
   pull-request:
-    branch:
+    branches:
       - '*'
 
 jobs:
