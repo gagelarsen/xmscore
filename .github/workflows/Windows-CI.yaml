@@ -79,10 +79,11 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
       # Set Conan Version
       - name: Set Conan Version
-        run: |
-          set XMS_VERSION=%GIT_TAG_NAME%
-          set CONAN_UPLOAD=%AQUAVEO_CONAN
-          set RELEASE_PYTON='True'
+        uses: allenevans/set-env@v1.0.0
+        with:
+          XMS_VERSION: ${{ GIT_TAG_NAME }}
+          CONAN_UPLOAD: ${{ %AQUAVEO_CONAN }}
+          RELEASE_PYTON: 'True'
         if: startsWith(github.ref, 'refs/tags/')
       # Build the Conan Package
       - name: Build the Conan Packages
