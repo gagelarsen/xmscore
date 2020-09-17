@@ -79,7 +79,7 @@ jobs:
       - name: Set Conan Version
         uses: allenevans/set-env@v1.1.0
         with:
-          CONAN_REFERENCE: 'aquaveo/testing'
+          CONAN_REFERENCE: 'xmscore/${{ steps.gitTag.outputs.tag }}'
           XMS_VERSION: ${{ steps.gitTag.outputs.tag }}
           CONAN_UPLOAD: https://conan.aquaveo.com
           RELEASE_PYTON: 'True'
